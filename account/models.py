@@ -40,6 +40,17 @@ class User(AbstractUser):
     username = models.CharField(max_length=150)
     activation_code = models.CharField(max_length=8, blank=True)
 
+    LEVEL_CH = (
+        ('elem', 'elementary'),
+        ('pre', 'pre-intermediate'),
+        ('inter', 'intermediate'),
+        ('upper', 'upper-intermediate'),
+        ('adv', 'advanced')
+    )
+
+    level = models.CharField(choices=LEVEL_CH, default='elem', max_length=50)
+
+
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
 

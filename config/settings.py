@@ -41,6 +41,7 @@ INSTALLED_APPS = [
 
     # apps
     'account',
+    'rooms',
 
     # libs
     'rest_framework',

@@ -6,16 +6,21 @@ from rest_framework.decorators import api_view
 from rest_framework.generics import get_object_or_404
 
 from .serializers import RegisterSerializer
-
+from rooms.models import Room
 User = get_user_model()
 
 class RegisterAPIView(APIView):
 
     def post(self, request):
+        
         serializer = RegisterSerializer(data=request.data)
         if serializer.is_valid(raise_exception=True):
+            # Room.objects.create(
+
+            # )
             serializer.save()
             return Response('Account created', 201)
+        
 
 @api_view(["GET"])
 def activate(request, activation_code):

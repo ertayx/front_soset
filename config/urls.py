@@ -33,7 +33,8 @@ schema_view = get_schema_view(
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('account/', include('account.urls')),
-    path('docs/', schema_view.with_ui("swagger"))
+    path('docs/', schema_view.with_ui("swagger")),
+    path('room/', include('rooms.urls'))
 ]
 
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
