@@ -49,7 +49,6 @@ class Tasks(models.Model):
     right_answer = models.CharField(max_length=150)
     flag = models.IntegerField(default=0)
     description = models.TextField()
-
     def __str__(self) -> str:
         return f'{self.right_answer} -->{self.lessons}'
 
@@ -62,5 +61,4 @@ class Answers(models.Model):
 
     def __str__(self) -> str:
         return f'{self.tasks}-->{self.user}'
-
 
