@@ -22,6 +22,7 @@ class RoomSerializer(serializers.ModelSerializer):
         rep =  super().to_representation(instance)
         filt = Answers.objects.filter(user=instance.user)
         rep['progress'] = filt.filter(accepted=True).count()
+        
 
         return rep
 

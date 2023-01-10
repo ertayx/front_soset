@@ -15,7 +15,9 @@ class RoomApiView(ModelViewSet):
     permission_classes = [IsRoomOwner, ]
 
     def get_queryset(self):
-        return Room.objects.filter(user = self.request.user)
+        rooms = Room.objects.filter(user = self.request.user)
+        # lessons = Lessons.objects.all()
+        return rooms
     
 
 class LessonApiView(ModelViewSet):
