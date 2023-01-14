@@ -57,14 +57,14 @@ class AnswersApiView(ModelViewSet):
         task = self.request.data.get('tasks')
         answer = self.request.data.get('answer')
         user = self.request.user
-        
-        task = get_object_or_404(Tasks, id=task)
-        qury = task.lessons.room_lesson.all()
+
+        tasks = get_object_or_404(Tasks, id=task)
+        qury = tasks.lessons.room_lesson.all()
         net = []
         for i in qury:
             if user == i.user:
                 print(i.user)
-                if task.right_answer == answer:
+                if tasks.right_answer == answer:
                     accepted_bool = True
                 else:
                     accepted_bool = False
@@ -73,8 +73,8 @@ class AnswersApiView(ModelViewSet):
                     answer = answer,
                     user = user,
                     accepted = accepted_bool,
-                    )
-                instance.tasks.add(task) 
+                    )      
+                instance.tasks.add(t_i) 
                 break
             elif user != i.user:
                 net.append('net')
