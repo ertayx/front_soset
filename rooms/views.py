@@ -57,7 +57,7 @@ class AnswersApiView(ModelViewSet):
         task = self.request.data.get('tasks')
         answer = self.request.data.get('answer')
         user = self.request.user
-        
+        print(self.request.data,'!!!')
         task = get_object_or_404(Tasks, id=task)
         qury = task.lessons.room_lesson.all()
         net = []
