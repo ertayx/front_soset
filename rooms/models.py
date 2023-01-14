@@ -2,6 +2,12 @@ from django.db import models
 
 from account.models import User
 
+class Essa(models.Model):
+    title = models.CharField(max_length=150)
+    description = models.TextField(max_length=1000)
+    text = models.TextField(max_length=3000, blank=True)
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, verbose_name='essa')
+
 class Room(models.Model):
     LEVEL_CH = (
         ('elem', 'elementary'),
@@ -15,6 +21,8 @@ class Room(models.Model):
     user = models.ForeignKey(User, related_name='user_room', on_delete=models.DO_NOTHING)
     lessons = models.ManyToManyField('Lessons', related_name='room_lesson', blank=True)
     progress = models.IntegerField(default=0)
+    payment = models.IntegerField(default=0)
+    count_lessons = models.IntegerField(default=0)
     
 
     def __str__(self) -> str:
@@ -49,6 +57,7 @@ class Tasks(models.Model):
     right_answer = models.CharField(max_length=150)
     flag = models.IntegerField(default=0)
     description = models.TextField()
+    
     def __str__(self) -> str:
         return f'{self.right_answer} -->{self.lessons}'
 

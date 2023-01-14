@@ -4,9 +4,16 @@ from rest_framework.permissions import IsAdminUser, IsAuthenticated
 from rest_framework.response import Response
 
 from account.models import User
-from .models import Lessons, Tasks, Answers, Room
-from .serializers import LessonSerializer, TasksSerializer, AnswersSerializer, RoomSerializer
-from .permissions import IsRoomOwner
+from .models import Lessons, Tasks, Answers, Room, Essa
+from .serializers import LessonSerializer, TasksSerializer, AnswersSerializer, RoomSerializer, EssaSerializer
+from .permissions import IsRoomOwner, IsEssaAuthor
+
+
+
+class EssaApiView(ModelViewSet):
+    queryset = Essa.objects.all()
+    serializer_class = EssaSerializer
+    permission_classes = [IsEssaAuthor, IsAdminUser]
 
 
 class RoomApiView(ModelViewSet):
@@ -15,7 +22,8 @@ class RoomApiView(ModelViewSet):
     permission_classes = [IsRoomOwner, ]
 
     def get_queryset(self):
-        return Room.objects.filter(user = self.request.user)
+        rooms = Room.objects.filter(user = self.request.user)
+        return rooms
     
 
 class LessonApiView(ModelViewSet):
@@ -34,17 +42,7 @@ class TasksApiView(ModelViewSet):
     serializer_class = TasksSerializer
     permission_classes = [IsAdminUser, ]
 
-    # def perform_create(self, serializer):
-    #     lesson = self.request.data.get('lessons')
-    #     right_answer = self.request.data.get('right_answer')
-    #     desc = self.request.data.get('description')
-    #     user = self.request.user
 
-    #     lesson_obj = get_object_or_404(Lessons, id=lesson)
-
-    #     room = lesson_obj.room_lesson.all()
-    #     for i in room:
-    #         print(i.user)
 class AnswersApiView(ModelViewSet):
     queryset = Answers.objects.all()
     serializer_class = AnswersSerializer
@@ -78,8 +76,6 @@ class AnswersApiView(ModelViewSet):
                 break
             elif user != i.user:
                 net.append('net')
-                # raise Exception('permission denied')
-                # break
         if len(net) == len(qury):
             raise Exception('permission denied')
         return Response('ok')

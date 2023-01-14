@@ -32,3 +32,44 @@ class RegisterSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         print('CREATING USER WITH DATA:', validated_data)
         return User.objects.create_user(**validated_data)
+
+
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = '__all__'
+
+    
+
+
+class ProfileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ("email", "username", "date_joined", "about")
+        
+    def to_representation(self, instance):
+        repr = super().to_representation(instance)
+        repr['full_name'] = instance.first_name + ' ' + instance.last_name
+
+        if instance.teacher:
+            repr['student'] = StudentSerializer(instance.student.all(), many=True).data
+        return repr
+
+
+class StudentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ("email", "username", "date_joined")
+
+    def to_representation(self, instance):
+        repr = super().to_representation(instance)
+        repr['full_name'] = instance.first_name + ' ' + instance.last_name
+        return repr
+
+    
+    
+   
+class ProfileUpdateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ("username", "about")
