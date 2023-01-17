@@ -28,7 +28,5 @@ class RoomAdmin(admin.ModelAdmin):
             form.instance.lessons.add(lesson)
             i+=1
        
-
-        
 admin.site.register(Room, RoomAdmin)
 admin.site.register(Essa)

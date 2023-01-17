@@ -7,7 +7,9 @@ from rest_framework.decorators import action
 from .models import Lessons, Tasks, Answers, Room, Essa
 from .serializers import LessonSerializer, TasksSerializer, AnswersSerializer, RoomSerializer, EssaSerializer
 from .permissions import IsRoomOwner, IsEssaAuthor
+from django.contrib.auth import get_user_model
 
+User = get_user_model()
 
 class EssaApiView(ModelViewSet):
     queryset = Essa.objects.all()
@@ -44,6 +46,37 @@ class TasksApiView(ModelViewSet):
     queryset = Tasks.objects.all()
     serializer_class = TasksSerializer
     permission_classes = [IsAdminUser, ]
+
+    @action(['POST', 'DELETE'], detail=True)
+    def answer(self, request, pk):
+        task = self.get_object()
+        # print(task, '!!!!!!!!!')
+        user = request.user
+        answer = request.data
+        
+        qury = task.lessons.room_lesson.all()
+        net = []
+        if request.method == 'POST':
+            for i in qury:
+                if user == i.user:
+                    if task.right_answer == answer.get('answers'):
+                        accepted_bool = True
+                    else:
+                        accepted_bool = False
+                    
+                    instance = Answers.objects.create(
+                        answer = answer.get('answers'),
+                        user = user,
+                        accepted = accepted_bool,
+                        )
+                    instance.tasks.add(task)
+                    return Response('твой ответ расчитан')
+                elif user != i.user:
+                    net.append('net')
+            if len(net) == len(qury):
+                raise Exception('permission denied')
+            return Response('ok')
+           
 
 
 class AnswersApiView(ModelViewSet):
