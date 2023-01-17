@@ -2,6 +2,7 @@ from django.shortcuts import get_object_or_404
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.permissions import IsAdminUser, IsAuthenticated
 from rest_framework.response import Response
+from rest_framework.decorators import action
 
 from .models import Lessons, Tasks, Answers, Room, Essa
 from .serializers import LessonSerializer, TasksSerializer, AnswersSerializer, RoomSerializer, EssaSerializer
@@ -11,7 +12,11 @@ from .permissions import IsRoomOwner, IsEssaAuthor
 class EssaApiView(ModelViewSet):
     queryset = Essa.objects.all()
     serializer_class = EssaSerializer
-    permission_classes = [IsEssaAuthor, IsAdminUser]
+    permission_classes = [IsEssaAuthor]
+
+    def get_queryset(self):
+        rooms = Essa.objects.filter(user = self.request.user)
+        return rooms
 
 
 class RoomApiView(ModelViewSet):
