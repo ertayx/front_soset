@@ -26,7 +26,7 @@ SECRET_KEY = config('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = config('ALLOWED_HOSTS').split()
+ALLOWED_HOSTS = config('ALLOWED_HOSTS').split(',')
 
 
 # Application definition
@@ -163,10 +163,7 @@ REST_FRAMEWORK = {
 
 
 from datetime import timedelta
-SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=1000),
-    'REFRESH_TOKEN_LIFETIME': timedelta(days=1)
-}
+
 
 SWAGGER_SETTINGS = {
     'SECURITY_DEFINITIONS': {
@@ -179,9 +176,9 @@ SWAGGER_SETTINGS = {
 }
 
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=30),
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=300),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
-    'ROTATE_REFRESH_TOKENS': False,
+    'ROTATE_REFRESH_TOKENS': True,
     'BLACKLIST_AFTER_ROTATION': False,
     'UPDATE_LAST_LOGIN': False,
 
