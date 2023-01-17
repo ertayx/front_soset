@@ -3,11 +3,9 @@ from rest_framework.viewsets import ModelViewSet
 from rest_framework.permissions import IsAdminUser, IsAuthenticated
 from rest_framework.response import Response
 
-from account.models import User
 from .models import Lessons, Tasks, Answers, Room, Essa
 from .serializers import LessonSerializer, TasksSerializer, AnswersSerializer, RoomSerializer, EssaSerializer
 from .permissions import IsRoomOwner, IsEssaAuthor
-
 
 
 class EssaApiView(ModelViewSet):
