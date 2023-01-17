@@ -2,12 +2,14 @@ from django.shortcuts import get_object_or_404
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.permissions import IsAdminUser, IsAuthenticated
 from rest_framework.response import Response
-
-from account.models import User
+from rest_framework.decorators import action
+# from account.models import User
 from .models import Lessons, Tasks, Answers, Room, Essa
 from .serializers import LessonSerializer, TasksSerializer, AnswersSerializer, RoomSerializer, EssaSerializer
 from .permissions import IsRoomOwner, IsEssaAuthor
+from django.contrib.auth import get_user_model
 
+User = get_user_model()
 
 
 class EssaApiView(ModelViewSet):
@@ -42,6 +44,59 @@ class TasksApiView(ModelViewSet):
     serializer_class = TasksSerializer
     permission_classes = [IsAdminUser, ]
 
+    @action(['POST', 'DELETE'], detail=True)
+    def answer(self, request, pk):
+        task = self.get_object()
+        # print(task, '!!!!!!!!!')
+        user = request.user
+        answer = request.data
+        print(answer.get('answers'), '!!!!!1')
+        
+        qury = task.lessons.room_lesson.all()
+        print(qury, '!!!!!!!!!!')
+        net = []
+        if request.method == 'POST':
+            for i in qury:
+                print(i,'!!!!!!!!')
+                if user == i.user:
+                    if task.right_answer == answer.get('answers'):
+                        print('!!!!!!!!!!!!!1')
+                        accepted_bool = True
+                    else:
+                        accepted_bool = False
+                    
+                    instance = Answers.objects.create(
+                        answer = answer.get('answers'),
+                        user = user,
+                        accepted = accepted_bool,
+                        )
+                    instance.tasks.add(task)
+                    return Response('твой ответ расчитан')
+                elif user != i.user:
+                    net.append('net')
+            if len(net) == len(qury):
+                raise Exception('permission denied')
+            return Response('ok')
+            # instance = Answers.objects.create(user=user, 
+            #                                   answer=answer.get('answers'))
+            # instance.tasks.add(task)
+            # # instance.save()
+            # return Response('ok a ty xarosh!', status=201)
+
+    # @action(['POST', 'DELETE'], detail=True)
+    # def like(self, request, pk):
+    #     post = self.get_object()
+    #     user = request.user
+    #     if request.method == 'POST':
+    #         if user.liked_posts.filter(post=post).exists():
+    #             return Response('This post is already liked!', status=400)
+    #         Answers.objects.create(owner=user, post=post)
+    #         return Response('You liked the post!', status=201)
+    #     else:
+    #         if not user.liked_posts.filter(post=post).exists():
+    #             return Response('You didn\'t liked this post!', status=400)
+    #         user.liked_posts.filter(post=post).delete()
+    #         return Response('Your like is deleted!', status=204)
 
 class AnswersApiView(ModelViewSet):
     queryset = Answers.objects.all()

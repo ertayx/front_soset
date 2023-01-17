@@ -36,7 +36,7 @@ class UserListAPIView(ListAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
     permission_classes = [IsAdminUser, ]
-
+    
 
 class ProfileRetrieveAPIView(RetrieveAPIView):
     queryset = User.objects.all()
