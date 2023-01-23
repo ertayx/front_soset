@@ -11,11 +11,14 @@ from django.contrib.auth import get_user_model
 
 User = get_user_model()
 
-
 class EssaApiView(ModelViewSet):
     queryset = Essa.objects.all()
     serializer_class = EssaSerializer
-    permission_classes = [IsEssaAuthor, IsAdminUser]
+    permission_classes = [IsEssaAuthor]
+
+    def get_queryset(self):
+        rooms = Essa.objects.filter(user = self.request.user)
+        return rooms
 
 class CaseWorkView(ModelViewSet):
     queryset = CaseWork.objects.all()
@@ -75,26 +78,8 @@ class TasksApiView(ModelViewSet):
             if len(net) == len(qury):
                 raise Exception('permission denied')
             return Response('ok')
-            # instance = Answers.objects.create(user=user, 
-            #                                   answer=answer.get('answers'))
-            # instance.tasks.add(task)
-            # # instance.save()
-            # return Response('ok a ty xarosh!', status=201)
+           
 
-    # @action(['POST', 'DELETE'], detail=True)
-    # def like(self, request, pk):
-    #     post = self.get_object()
-    #     user = request.user
-    #     if request.method == 'POST':
-    #         if user.liked_posts.filter(post=post).exists():
-    #             return Response('This post is already liked!', status=400)
-    #         Answers.objects.create(owner=user, post=post)
-    #         return Response('You liked the post!', status=201)
-    #     else:
-    #         if not user.liked_posts.filter(post=post).exists():
-    #             return Response('You didn\'t liked this post!', status=400)
-    #         user.liked_posts.filter(post=post).delete()
-    #         return Response('Your like is deleted!', status=204)
 
 class AnswersApiView(ModelViewSet):
     queryset = Answers.objects.all()
@@ -108,7 +93,7 @@ class AnswersApiView(ModelViewSet):
         task = self.request.data.get('tasks')
         answer = self.request.data.get('answer')
         user = self.request.user
-        
+        print(self.request.data,'!!!')
         task = get_object_or_404(Tasks, id=task)
         qury = task.lessons.room_lesson.all()
         net = []
