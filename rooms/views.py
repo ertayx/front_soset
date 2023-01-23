@@ -4,8 +4,8 @@ from rest_framework.permissions import IsAdminUser, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.decorators import action
 # from account.models import User
-from .models import Lessons, Tasks, Answers, Room, Essa
-from .serializers import LessonSerializer, TasksSerializer, AnswersSerializer, RoomSerializer, EssaSerializer
+from .models import Lessons, Tasks, Answers, Room, Essa, CaseWork
+from .serializers import LessonSerializer, TasksSerializer, AnswersSerializer, RoomSerializer, EssaSerializer, CaseWorkSerializer
 from .permissions import IsRoomOwner, IsEssaAuthor
 from django.contrib.auth import get_user_model
 
@@ -17,6 +17,10 @@ class EssaApiView(ModelViewSet):
     serializer_class = EssaSerializer
     permission_classes = [IsEssaAuthor, IsAdminUser]
 
+class CaseWorkView(ModelViewSet):
+    queryset = CaseWork.objects.all()
+    serializer_class = CaseWorkSerializer
+    permission_classes = [IsAdminUser]
 
 class RoomApiView(ModelViewSet):
     queryset = Room.objects.all()
@@ -38,7 +42,7 @@ class LessonApiView(ModelViewSet):
         context.update({"request": self.request})
         return context
 
-    
+
 class TasksApiView(ModelViewSet):
     queryset = Tasks.objects.all()
     serializer_class = TasksSerializer
@@ -47,20 +51,14 @@ class TasksApiView(ModelViewSet):
     @action(['POST', 'DELETE'], detail=True)
     def answer(self, request, pk):
         task = self.get_object()
-        # print(task, '!!!!!!!!!')
         user = request.user
         answer = request.data
-        print(answer.get('answers'), '!!!!!1')
-        
         qury = task.lessons.room_lesson.all()
-        print(qury, '!!!!!!!!!!')
         net = []
         if request.method == 'POST':
             for i in qury:
-                print(i,'!!!!!!!!')
                 if user == i.user:
                     if task.right_answer == answer.get('answers'):
-                        print('!!!!!!!!!!!!!1')
                         accepted_bool = True
                     else:
                         accepted_bool = False
