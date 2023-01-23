@@ -1,6 +1,13 @@
 from django.db import models
+from django.contrib.auth import get_user_model
 
-from account.models import User
+User = get_user_model()
+
+class Essa(models.Model):
+    title = models.CharField(max_length=150)
+    description = models.TextField(max_length=1000)
+    text = models.TextField(max_length=3000, blank=True)
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, verbose_name='essa')
 
 class Room(models.Model):
     LEVEL_CH = (
@@ -15,6 +22,8 @@ class Room(models.Model):
     user = models.ForeignKey(User, related_name='user_room', on_delete=models.DO_NOTHING)
     lessons = models.ManyToManyField('Lessons', related_name='room_lesson', blank=True)
     progress = models.IntegerField(default=0)
+    payment = models.IntegerField(default=0)
+    count_lessons = models.IntegerField(default=0)
     
 
     def __str__(self) -> str:
@@ -43,12 +52,25 @@ class Lessons(models.Model):
     def __str__(self) -> str:
         return f'{self.title}-->{self.case_work} --> {self.level}'
 
+class CaseWork(models.Model):
+    CASECHOISE = (
+        ('first', 'first'),
+        ('second', 'second'),
+        ('third', 'third'),
+        ('fourth','fourth')
+    )
+
+    title = models.CharField(choices=CASECHOISE, max_length=30)
+
+    def __str__(self) -> str:
+        return f'{self.title}'
 
 class Tasks(models.Model):
     lessons = models.ForeignKey(Lessons, related_name='task_lesson', on_delete=models.RESTRICT)
     right_answer = models.CharField(max_length=150)
     flag = models.IntegerField(default=0)
     description = models.TextField()
+    case_work = models.ForeignKey(CaseWork, related_name='tasks_case', on_delete=models.DO_NOTHING)
     def __str__(self) -> str:
         return f'{self.right_answer} -->{self.lessons}'
 
