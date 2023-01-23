@@ -86,34 +86,4 @@ class AnswersApiView(ModelViewSet):
 
     def get_queryset(self):
         return Answers.objects.filter(user = self.request.user)
-    
-    def perform_create(self, serializer):
-        task = self.request.data.get('tasks')
-        answer = self.request.data.get('answer')
-        user = self.request.user
-        print(self.request.data,'!!!')
-        task = get_object_or_404(Tasks, id=task)
-        qury = task.lessons.room_lesson.all()
-        net = []
-        for i in qury:
-            if user == i.user:
-                print(i.user)
-                if task.right_answer == answer:
-                    accepted_bool = True
-                else:
-                    accepted_bool = False
-                
-                instance = Answers.objects.create(
-                    answer = answer,
-                    user = user,
-                    accepted = accepted_bool,
-                    )
-                instance.tasks.add(task) 
-                break
-            elif user != i.user:
-                net.append('net')
-        if len(net) == len(qury):
-            raise Exception('permission denied')
-        return Response('ok')
-        
-        
+
