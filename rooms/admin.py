@@ -1,10 +1,11 @@
 from django.contrib import admin
 
-from .models import Room, Lessons, Tasks, Answers, Essa
+from .models import Room, Lessons, Tasks, Answers, Essa, CaseWork
 
 admin.site.register(Lessons)
 admin.site.register(Tasks)
 admin.site.register(Answers)
+admin.site.register(CaseWork)
 
 class RoomAdmin(admin.ModelAdmin):
     def save_model(self, request, obj, form, change):

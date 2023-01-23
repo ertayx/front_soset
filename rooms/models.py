@@ -52,13 +52,25 @@ class Lessons(models.Model):
     def __str__(self) -> str:
         return f'{self.title}-->{self.case_work} --> {self.level}'
 
+class CaseWork(models.Model):
+    CASECHOISE = (
+        ('first', 'first'),
+        ('second', 'second'),
+        ('third', 'third'),
+        ('fourth','fourth')
+    )
+
+    title = models.CharField(choices=CASECHOISE, max_length=30)
+
+    def __str__(self) -> str:
+        return f'{self.title}'
 
 class Tasks(models.Model):
     lessons = models.ForeignKey(Lessons, related_name='task_lesson', on_delete=models.RESTRICT)
     right_answer = models.CharField(max_length=150)
     flag = models.IntegerField(default=0)
     description = models.TextField()
-    
+    case_work = models.ForeignKey(CaseWork, related_name='tasks_case', on_delete=models.DO_NOTHING)
     def __str__(self) -> str:
         return f'{self.right_answer} -->{self.lessons}'
 

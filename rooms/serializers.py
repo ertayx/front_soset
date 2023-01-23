@@ -2,7 +2,7 @@ from rest_framework import serializers
 from django.shortcuts import get_object_or_404
 from django.contrib.auth import get_user_model
 
-from .models import Room, Lessons, Tasks, Answers, Essa
+from .models import Room, Lessons, Tasks, Answers, Essa, CaseWork
 
 User = get_user_model()
 
@@ -50,6 +50,15 @@ class LessonSerializer(serializers.ModelSerializer):
         
         return rep
 
+class CaseWorkSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CaseWork
+        fields = '__all__'
+
+    def to_representation(self, instance):
+        rep = super().to_representation(instance)
+        rep['tasks'] = TasksSerializer(instance.tasks_case, many=True).data
+        return rep
 
 class TasksSerializer(serializers.ModelSerializer):
     class Meta:
@@ -57,7 +66,6 @@ class TasksSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
     def to_representation(self, instance):
-
         rep = super().to_representation(instance)
         rep['title'] = f'{instance.lessons.title} {instance.id}'
         rep['answers'] = AnswersSerializer(instance.task_answer, many=True).data

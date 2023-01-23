@@ -164,7 +164,6 @@ REST_FRAMEWORK = {
 
 from datetime import timedelta
 
-
 SWAGGER_SETTINGS = {
     'SECURITY_DEFINITIONS': {
         'Bearer': {
