@@ -7,6 +7,11 @@ admin.site.register(Tasks)
 admin.site.register(Answers)
 admin.site.register(CaseWork)
 
+class EssaModelAdmin(admin.ModelAdmin):
+    def formfield_for_foreignkey(self, db_field, request, **kwargs):
+        kwargs["queryset"] = request.user.student.all()
+        return super().formfield_for_foreignkey(db_field, request, **kwargs)
+
 class RoomAdmin(admin.ModelAdmin):
     def save_model(self, request, obj, form, change):
         

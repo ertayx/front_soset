@@ -16,9 +16,15 @@ class EssaApiView(ModelViewSet):
     serializer_class = EssaSerializer
     permission_classes = [IsEssaAuthor]
 
+    def list(self, request, *args, **kwargs):
+        return super().list(request, *args, **kwargs)
+
     def get_queryset(self):
-        rooms = Essa.objects.filter(user = self.request.user)
-        return rooms
+        if self.request.user.is_teacher:
+            all_essa = Essa.objects.filter(students__teacher=self.request.user)
+        else:
+            all_essa = Essa.objects.filter(students__id=self.request.user.id)
+        return all_essa
 
 class CaseWorkView(ModelViewSet):
     queryset = CaseWork.objects.all()
@@ -89,33 +95,33 @@ class AnswersApiView(ModelViewSet):
     def get_queryset(self):
         return Answers.objects.filter(user = self.request.user)
     
-    def perform_create(self, serializer):
-        task = self.request.data.get('tasks')
-        answer = self.request.data.get('answer')
-        user = self.request.user
-        print(self.request.data,'!!!')
-        task = get_object_or_404(Tasks, id=task)
-        qury = task.lessons.room_lesson.all()
-        net = []
-        for i in qury:
-            if user == i.user:
-                print(i.user)
-                if tasks.right_answer == answer:
-                    accepted_bool = True
-                else:
-                    accepted_bool = False
+    # def perform_create(self, serializer):
+    #     task = self.request.data.get('tasks')
+    #     answer = self.request.data.get('answer')
+    #     user = self.request.user
+    #     print(self.request.data,'!!!')
+    #     task = get_object_or_404(Tasks, id=task)
+    #     qury = task.lessons.room_lesson.all()
+    #     net = []
+    #     for i in qury:
+    #         if user == i.user:
+    #             print(i.user)
+    #             if task.right_answer == answer:
+    #                 accepted_bool = True
+    #             else:
+    #                 accepted_bool = False
                 
-                instance = Answers.objects.create(
-                    answer = answer,
-                    user = user,
-                    accepted = accepted_bool,
-                    )      
-                instance.tasks.add(t_i) 
-                break
-            elif user != i.user:
-                net.append('net')
-        if len(net) == len(qury):
-            raise Exception('permission denied')
-        return Response('ok')
+    #             instance = Answers.objects.create(
+    #                 answer = answer,
+    #                 user = user,
+    #                 accepted = accepted_bool,
+    #                 )      
+    #             instance.tasks.add(t_i) 
+    #             break
+    #         elif user != i.user:
+    #             net.append('net')
+    #     if len(net) == len(qury):
+    #         raise Exception('permission denied')
+    #     return Response('ok')
         
         

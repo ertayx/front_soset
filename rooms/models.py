@@ -1,13 +1,12 @@
 from django.db import models
-from django.contrib.auth import get_user_model
-
-User = get_user_model()
+from account.models import User, Student
 
 class Essa(models.Model):
+    teacher = models.ForeignKey(User, related_name='essays', on_delete=models.CASCADE)
     title = models.CharField(max_length=150)
     description = models.TextField(max_length=1000)
     text = models.TextField(max_length=3000, blank=True)
-    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, verbose_name='essa')
+    students = models.ManyToManyField(Student, related_name='essays')
 
 class Room(models.Model):
     LEVEL_CH = (
