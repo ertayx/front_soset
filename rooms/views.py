@@ -88,9 +88,6 @@ class AnswersApiView(ModelViewSet):
 
     def get_queryset(self):
         return Answers.objects.filter(user = self.request.user)
-<<<<<<< HEAD
-
-=======
     
     def perform_create(self, serializer):
         task = self.request.data.get('tasks')
@@ -122,4 +119,3 @@ class AnswersApiView(ModelViewSet):
         return Response('ok')
         
         
->>>>>>> 09eba5d7814687b23c8784455a89868f7849714e
