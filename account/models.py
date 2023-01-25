@@ -39,7 +39,6 @@ class User(AbstractUser):
     email = models.EmailField(max_length=150, unique=True)
     username = models.CharField(max_length=150)
     activation_code = models.CharField(max_length=8, blank=True)
-    student = models.ManyToManyField('User', blank=True, related_name='users')
     first_name = models.CharField(max_length=150, blank=True)
     last_name = models.CharField(max_length=150, blank=True)
     about = models.TextField(max_length=1000, blank=True)
@@ -53,7 +52,7 @@ class User(AbstractUser):
     )
 
     level = models.CharField(choices=LEVEL_CH, default='elem', max_length=50)
-    teacher = models.BooleanField(default=False)
+    is_teacher = models.BooleanField(default=False)
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
@@ -61,3 +60,6 @@ class User(AbstractUser):
     objects = UserManager()
 
     
+class Student(models.Model):
+    student = models.OneToOneField(User, on_delete=models.SET_NULL, related_name='teacher', null=True)
+    teacher = models.ForeignKey(User, on_delete=models.SET_NULL, related_name='students', null=True)
