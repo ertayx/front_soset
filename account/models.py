@@ -63,3 +63,8 @@ class User(AbstractUser):
 class Student(models.Model):
     student = models.OneToOneField(User, on_delete=models.SET_NULL, related_name='teacher', null=True)
     teacher = models.ForeignKey(User, on_delete=models.SET_NULL, related_name='students', null=True)
+
+# class Schedule(models.Model):
+#     student = models.ForeignKey(Student, related_name='schedule_student', on_delete=models.CASCADE)
+#     date_time = models.DateTimeField()
+    # date_time_end = models.DateTimeField()

@@ -7,6 +7,8 @@ class Essa(models.Model):
     description = models.TextField(max_length=1000)
     text = models.TextField(max_length=3000, blank=True)
     students = models.ManyToManyField(Student, related_name='essays')
+    checked = models.BooleanField(default=False)
+    
 
 class Room(models.Model):
     LEVEL_CH = (
