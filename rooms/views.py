@@ -8,8 +8,14 @@ from .models import Lessons, Tasks, Answers, Room, Essa, CaseWork
 from .serializers import LessonSerializer, TasksSerializer, AnswersSerializer, RoomSerializer, EssaSerializer, CaseWorkSerializer
 from .permissions import IsRoomOwner, IsEssaAuthor
 from django.contrib.auth import get_user_model
+from rest_framework.pagination import PageNumberPagination
 
 User = get_user_model()
+
+class StandardResultsSetPagination(PageNumberPagination):
+    page_size = 1
+    page_size_query_param = 'page_size'
+    max_page_size = 2
 
 class EssaApiView(ModelViewSet):
     queryset = Essa.objects.all()
@@ -56,7 +62,7 @@ class TasksApiView(ModelViewSet):
     queryset = Tasks.objects.all()
     serializer_class = TasksSerializer
     permission_classes = [IsAdminUser, ]
-
+    pagination_class = StandardResultsSetPagination
     @action(['POST', 'DELETE'], detail=True)
     def answer(self, request, pk):
         task = self.get_object()
