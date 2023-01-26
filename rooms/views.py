@@ -10,12 +10,37 @@ from .permissions import IsRoomOwner, IsEssaAuthor
 from django.contrib.auth import get_user_model
 from rest_framework.pagination import PageNumberPagination
 
+
 User = get_user_model()
 
 class StandardResultsSetPagination(PageNumberPagination):
     page_size = 1
     page_size_query_param = 'page_size'
     max_page_size = 2
+
+
+class CustomPagination(PageNumberPagination):
+    page_size = 1
+    page_size_query_param = 'page_size'
+    max_page_size = 2
+    
+    # @action(['GET',],detail=True)
+    # def get_tasks(self,request,pk):
+
+
+    def get_paginated_response(self, data):
+        # number_of_page = self.page.number
+        # for i in data:
+        #     data_ = i.get('tasks')[number_of_page-1]
+
+            return Response({
+                'links': {
+                    'next': self.get_next_link(),
+                    'previous': self.get_previous_link()
+                },
+                'count': self.page.paginator.count,
+                'results': data
+            })
 
 class EssaApiView(ModelViewSet):
     queryset = Essa.objects.all()
@@ -36,6 +61,16 @@ class CaseWorkView(ModelViewSet):
     queryset = CaseWork.objects.all()
     serializer_class = CaseWorkSerializer
     permission_classes = [IsAdminUser]
+    pagination_class = CustomPagination
+
+    @action(['GET',], detail=True)
+    def get_task(self, requset, pk):
+        case = self.get_object()
+        for i in case.tasks_case.all():
+            print(i.case_work, '!!!!!!!!')
+            if i.case_work.exists():
+                return Response(f'{i}') 
+        return Response(f'{case.tasks_case}')
 
 class RoomApiView(ModelViewSet):
     queryset = Room.objects.all()
@@ -63,6 +98,7 @@ class TasksApiView(ModelViewSet):
     serializer_class = TasksSerializer
     permission_classes = [IsAdminUser, ]
     pagination_class = StandardResultsSetPagination
+
     @action(['POST', 'DELETE'], detail=True)
     def answer(self, request, pk):
         task = self.get_object()
@@ -131,3 +167,29 @@ class AnswersApiView(ModelViewSet):
     #     return Response('ok')
         
         
+# class TaskList():
+#     Task.objects.all()
+
+
+class Task_CaseApiView(ModelViewSet):
+    queryset = CaseWork.objects.all()
+    serializer_class = CaseWorkSerializer
+    
+    def retrieve(self, request, *args, **kwargs):
+        params = request.GET.get('task')
+        
+        print(type(params), '!!!!!!!!!!!!!!!!!!!')
+
+        if params:
+            instance = self.get_object()
+            serializer = self.get_serializer(instance)
+            data = serializer.data
+            try:
+                res = data['tasks'][int(params)-1]
+                return Response(res, 200)
+            except:
+                return Response('Powel nahui Ertay', 400)
+        else:
+            instance = self.get_object()
+            serializer = self.get_serializer(instance)
+        return Response(serializer.data)
