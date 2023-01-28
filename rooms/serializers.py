@@ -12,9 +12,9 @@ class EssaSerializer(serializers.ModelSerializer):
         model = Essa
         fields = '__all__'
 
-    def save(self, **kwargs):
-        self.validated_data['user'] = self.context['request'].user
-        return super().save(**kwargs)
+    # def save(self, **kwargs):
+    #     self.validated_data['teacher'] = self.context['request'].user
+    #     return super().save(**kwargs)
 
 
 class RoomSerializer(serializers.ModelSerializer):
