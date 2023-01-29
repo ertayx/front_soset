@@ -12,10 +12,10 @@ class UserListAPIView(ListAPIView):
     serializer_class = UserSerializer
     permission_classes = [IsAdminUser, ]
 
-    # def get_queryset(self):
-    #     if self.is_teacher:
 
-    #     return 
+    def get_queryset(self):
+        student_list = User.objects.get(id=self.request.user.id).student.all()
+        return student_list
     
 
 class ProfileRetrieveAPIView(RetrieveAPIView):

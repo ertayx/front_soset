@@ -35,7 +35,7 @@ class RegisterSerializer(serializers.ModelSerializer):
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = '__all__'
+        fields = ("email", "username", "date_joined", "about")
 
     
 
@@ -50,20 +50,9 @@ class ProfileSerializer(serializers.ModelSerializer):
         repr['full_name'] = instance.first_name + ' ' + instance.last_name
         # print(instance.student.name, '!!!!!!!!!!!@!')
 
-        if instance.is_teacher and instance.students.exists():
-            repr['students'] = StudentSerializer(instance.students.all(), many=True).data
         return repr
 
 
-class StudentSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Student
-        fields = '__all__'
-
-    def to_representation(self, instance):
-        repr = super().to_representation(instance)
-        repr['full_name'] = instance.student.first_name + ' ' + instance.student.last_name
-        return repr
 
     
    

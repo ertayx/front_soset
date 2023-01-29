@@ -6,9 +6,11 @@ class Essa(models.Model):
     title = models.CharField(max_length=150)
     description = models.TextField(max_length=1000)
     text = models.TextField(max_length=3000, blank=True)
-    students = models.ManyToManyField(Student, related_name='essays')
-    checked = models.BooleanField(default=False)
-    
+    student = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='student_essays')
+    teacher = models.ForeignKey(User, on_delete=models.SET_NULL , blank=True, null=True, related_name='teacher_users')
+    check = models.BooleanField(default=False)
+    accepted = models.BooleanField(default=False)
+
 
 class Room(models.Model):
     LEVEL_CH = (

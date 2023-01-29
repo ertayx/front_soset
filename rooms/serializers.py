@@ -10,17 +10,14 @@ User = get_user_model()
 class EssaSerializer(serializers.ModelSerializer):
     class Meta:
         model = Essa
-        exclude = ('teacher',)
+        fields = '__all__'
+
+    # def save(self, **kwargs):
+    #     self.validated_data['teacher'] = self.context['request'].user
+    #     return super().save(**kwargs)
 
 
-    def validate(self, attrs):
-        super().validate(attrs)
-        if self.context.get('request').method not in ['PATCH', 'PUT']:
-            if not self.context.get('request').user.is_teacher:
-                raise serializers.ValidationError("Only teachers can create essays")
-        attrs['teacher'] = self.context.get('request').user
-        return attrs
-    
+
 
     # def to_representation(self, instance):
         # rep = super().to_representation(instance)
