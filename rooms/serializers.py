@@ -17,6 +17,11 @@ class EssaSerializer(serializers.ModelSerializer):
     #     return super().save(**kwargs)
 
 
+
+
+    # def to_representation(self, instance):
+        # rep = super().to_representation(instance)
+        
 class RoomSerializer(serializers.ModelSerializer):
     lessons = serializers.HyperlinkedRelatedField(
         many=True,

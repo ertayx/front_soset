@@ -1,14 +1,15 @@
 from django.db import models
-from django.contrib.auth import get_user_model
-
-User = get_user_model()
+from account.models import User, Student
 
 class Essa(models.Model):
+    teacher = models.ForeignKey(User, related_name='essays', on_delete=models.CASCADE)
     title = models.CharField(max_length=150)
     description = models.TextField(max_length=1000)
     text = models.TextField(max_length=3000, blank=True)
     student = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='student_essays')
     teacher = models.ForeignKey(User, on_delete=models.SET_NULL , blank=True, null=True, related_name='teacher_users')
+    check = models.BooleanField(default=False)
+    accepted = models.BooleanField(default=False)
 
 
 class Room(models.Model):

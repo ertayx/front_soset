@@ -7,20 +7,25 @@ admin.site.register(Tasks)
 admin.site.register(Answers)
 admin.site.register(CaseWork)
 
-class RoomAdmin(admin.ModelAdmin):
-    def save_model(self, request, obj, form, change):
-        
-        count = form.instance.payment / 900
-        form.instance.count_lessons = count
+class EssaModelAdmin(admin.ModelAdmin):
+    def formfield_for_foreignkey(self, db_field, request, **kwargs):
+        kwargs["queryset"] = request.user.student.all()
+        return super().formfield_for_foreignkey(db_field, request, **kwargs)
 
-        super(RoomAdmin, self).save_model(request, obj, form, change)
+class RoomAdmin(admin.ModelAdmin):
+    # def save_model(self, request, obj, form, change): 
+        
+    #     count = form.instance.payment / 900
+    #     form.instance.count_lessons = count
+
+    #     super(RoomAdmin, self).save_model(request, obj, form, change)
 
     def save_related(self, request, form, formsets, change):
         super(RoomAdmin, self).save_related(request, form, formsets, change)
 
         lessons_query = Lessons.objects.filter(level=form.instance.level)
         
-        count = form.instance.payment / 900
+        count = form.instance.count_lessons
         i = 0
         for lesson in lessons_query:
             if i == count or count < 1:
