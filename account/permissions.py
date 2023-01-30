@@ -7,7 +7,7 @@ User = get_user_model()
 class IsProfileAuthor(BasePermission):
     def has_object_permission(self, request, view, obj):
 
-        student_list = User.objects.get(id=request.user.id).students.all()
+        student_list = User.objects.get(id=request.user.id).student.all()
         
         return (obj.id == request.user.id) or (obj in student_list)
 

@@ -4,11 +4,8 @@ from django.contrib.auth.models import Group
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.forms import ReadOnlyPasswordHashField
 
-from .models import User, Student
+from .models import User
 
-class StudentInline(admin.TabularInline):
-    model = Student
-    fk_name = 'teacher'
 
 class UserCreationForm(forms.ModelForm):
     """A form for creating new users. Includes all the required
@@ -66,7 +63,7 @@ class UserAdmin(BaseUserAdmin):
     list_display = ('email','is_superuser')
     list_filter = ('is_superuser',)
     fieldsets = (
-        (None, {'fields': ('email', 'password','username', 'first_name','last_name', 'is_teacher', 'is_active', 'level')}),
+        (None, {'fields': ('email', 'password','username', 'first_name','last_name', 'student', 'is_teacher', 'is_active', 'level')}),
         ('Permissions', {'fields': ('is_superuser',)}),
     )
     # add_fieldsets is not a standard ModelAdmin attribute. UserAdmin
@@ -74,13 +71,13 @@ class UserAdmin(BaseUserAdmin):
     add_fieldsets = (
         (None, {
             'classes': ('wide',),
-            'fields': ('email', 'password1', 'password2', 'username', 'first_name','last_name', 'is_teacher', 'is_active', 'level')}
+            'fields': ('email', 'password1', 'password2', 'username','student', 'first_name','last_name', 'is_teacher', 'is_active', 'level')}
         ),
     )
     search_fields = ('email',)
     ordering = ('email',)
     filter_horizontal = ()
-    inlines = (StudentInline,)
+
 
 
 # Now register the new UserAdmin...
