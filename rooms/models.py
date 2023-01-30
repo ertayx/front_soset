@@ -6,6 +6,7 @@ class Essa(models.Model):
     title = models.CharField(max_length=150)
     description = models.TextField(max_length=1000)
     text = models.TextField(max_length=3000, blank=True)
+    teacher_text = models.TextField(max_length=3000, blank=True)
     student = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='student_essays')
     teacher = models.ForeignKey(User, on_delete=models.SET_NULL , blank=True, null=True, related_name='teacher_users')
     checked = models.BooleanField(default=False)
