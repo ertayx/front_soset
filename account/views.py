@@ -10,7 +10,7 @@ User = get_user_model()
 class UserListAPIView(ListAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
-    permission_classes = [IsAdminUser, ]
+    permission_classes = [IsAdminUser, IsProfileAuthor]
 
 
     def get_queryset(self):

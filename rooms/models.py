@@ -1,5 +1,5 @@
 from django.db import models
-from account.models import User, Student
+from account.models import User
 
 class Essa(models.Model):
     teacher = models.ForeignKey(User, related_name='essays', on_delete=models.CASCADE)

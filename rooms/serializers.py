@@ -63,6 +63,7 @@ class CaseWorkSerializer(serializers.ModelSerializer):
     def to_representation(self, instance):
         rep = super().to_representation(instance)
         rep['tasks'] = TasksSerializer(instance.tasks_case, many=True).data
+        rep['quantity_task'] = instance.tasks_case.count()
         return rep
 
 class TasksSerializer(serializers.ModelSerializer):
