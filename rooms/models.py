@@ -8,7 +8,7 @@ class Essa(models.Model):
     text = models.TextField(max_length=3000, blank=True)
     student = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='student_essays')
     teacher = models.ForeignKey(User, on_delete=models.SET_NULL , blank=True, null=True, related_name='teacher_users')
-    check = models.BooleanField(default=False)
+    checked = models.BooleanField(default=False)
     accepted = models.BooleanField(default=False)
 
 

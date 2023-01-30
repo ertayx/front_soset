@@ -11,8 +11,6 @@ from django.contrib.auth import get_user_model
 from rest_framework.pagination import PageNumberPagination
 
 
-
-
 User = get_user_model()
 
 class StandardResultsSetPagination(PageNumberPagination):
@@ -149,8 +147,6 @@ class Task_CaseApiView(ModelViewSet):
     
     def retrieve(self, request, *args, **kwargs):
         params = request.GET.get('task')
-        
-        print(type(params), '!!!!!!!!!!!!!!!!!!!')
 
         if params:
             instance = self.get_object()
