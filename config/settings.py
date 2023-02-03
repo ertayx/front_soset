@@ -42,7 +42,8 @@ INSTALLED_APPS = [
     # apps
     'account',
     'rooms',
-
+    'schedule',
+    
     # libs
     'rest_framework',
     'rest_framework_simplejwt',

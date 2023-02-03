@@ -1,11 +1,12 @@
 from django.db import models
 from account.models import User
-
+# from schedule.models import Table
 class Essa(models.Model):
     teacher = models.ForeignKey(User, related_name='essays', on_delete=models.CASCADE)
     title = models.CharField(max_length=150)
     description = models.TextField(max_length=1000)
     text = models.TextField(max_length=3000, blank=True)
+    teacher_text = models.TextField(max_length=3000, blank=True)
     student = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='student_essays')
     teacher = models.ForeignKey(User, on_delete=models.SET_NULL , blank=True, null=True, related_name='teacher_users')
     checked = models.BooleanField(default=False)
@@ -28,10 +29,8 @@ class Room(models.Model):
     payment = models.IntegerField(default=0)
     count_lessons = models.IntegerField(default=0)
     
-
     def __str__(self) -> str:
         return f'{self.user} --> {self.level}'
-
 
 
 class Lessons(models.Model):
@@ -55,6 +54,7 @@ class Lessons(models.Model):
     def __str__(self) -> str:
         return f'{self.title}-->{self.case_work} --> {self.level}'
 
+
 class CaseWork(models.Model):
     CASECHOISE = (
         ('first', 'first'),
@@ -67,6 +67,7 @@ class CaseWork(models.Model):
 
     def __str__(self) -> str:
         return f'{self.title}'
+
 
 class Tasks(models.Model):
     lessons = models.ForeignKey(Lessons, related_name='task_lesson', on_delete=models.RESTRICT)

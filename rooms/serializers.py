@@ -12,15 +12,6 @@ class EssaSerializer(serializers.ModelSerializer):
         model = Essa
         fields = '__all__'
 
-    # def save(self, **kwargs):
-    #     self.validated_data['teacher'] = self.context['request'].user
-    #     return super().save(**kwargs)
-
-
-
-
-    # def to_representation(self, instance):
-        # rep = super().to_representation(instance)
         
 class RoomSerializer(serializers.ModelSerializer):
     lessons = serializers.HyperlinkedRelatedField(

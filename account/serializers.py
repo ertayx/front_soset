@@ -1,5 +1,20 @@
 from rest_framework import serializers
 from .models import User
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer, TokenRefreshSerializer
+
+
+
+class CustomLoginSerializer(TokenObtainPairSerializer):
+    def validate(self, attrs):
+        data = super().validate(attrs)
+        # print(attrs)
+        # print(data)
+        user = User.objects.get(email = attrs['email']) 
+        data["id"] = user.id
+        data["is_teacher"] = user.is_teacher
+        return data
+
+
 
 class RegisterSerializer(serializers.ModelSerializer):
 

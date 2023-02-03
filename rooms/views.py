@@ -24,15 +24,8 @@ class CustomPagination(PageNumberPagination):
     page_size_query_param = 'page_size'
     max_page_size = 2
     
-    # @action(['GET',],detail=True)
-    # def get_tasks(self,request,pk):
-
 
     def get_paginated_response(self, data):
-        # number_of_page = self.page.number
-        # for i in data:
-        #     data_ = i.get('tasks')[number_of_page-1]
-
             return Response({
                 'links': {
                     'next': self.get_next_link(),
@@ -58,7 +51,6 @@ class EssaApiView(ModelViewSet):
     def perform_create(self, serializer):
         serializer.save(teacher=self.request.user)
         
-        
 
 class CaseWorkView(ModelViewSet):
     queryset = CaseWork.objects.all()
@@ -74,6 +66,7 @@ class CaseWorkView(ModelViewSet):
             if i.case_work.exists():
                 return Response(f'{i}') 
         return Response(f'{case.tasks_case}')
+
 
 class RoomApiView(ModelViewSet):
     queryset = Room.objects.all()

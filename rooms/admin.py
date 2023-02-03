@@ -13,12 +13,6 @@ class EssaModelAdmin(admin.ModelAdmin):
         return super().formfield_for_foreignkey(db_field, request, **kwargs)
 
 class RoomAdmin(admin.ModelAdmin):
-    # def save_model(self, request, obj, form, change): 
-        
-    #     count = form.instance.payment / 900
-    #     form.instance.count_lessons = count
-
-    #     super(RoomAdmin, self).save_model(request, obj, form, change)
 
     def save_related(self, request, form, formsets, change):
         super(RoomAdmin, self).save_related(request, form, formsets, change)
