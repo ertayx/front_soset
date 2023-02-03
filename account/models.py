@@ -54,7 +54,6 @@ class User(AbstractUser):
 
     level = models.CharField(choices=LEVEL_CH, default='elem', max_length=50)
     is_teacher = models.BooleanField(default=False)
-    is_teacher = models.BooleanField(default=False)
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
