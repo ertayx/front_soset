@@ -11,12 +11,11 @@ class TableViewSet(ModelViewSet):
     serializer_class = TableSerializer
     # permission_classes = [IsAdminUser]
 
-
     def create(self, request, *args, **kwargs):
         user = request.user
-        # print(user.is_teacher)
         if not user.is_teacher:
             # user = request.user
+            
             weekday = request.data.get('weekday')
             time = request.data.get('time')
             room_id = user.user_room.all()
@@ -47,8 +46,9 @@ class TableViewSet(ModelViewSet):
             )
             serializer = TableSerializer(qury)
             return Response(serializer.data)
-
+    
     def list(self, request, *args, **kwargs):
+        
         user = request.user
         queryset = self.queryset
         a = []
@@ -57,7 +57,6 @@ class TableViewSet(ModelViewSet):
                 if i.room.user.studen_users.exists():
                     serializer = TableSerializer(i)
                     a.append(serializer.data)
-        
             return Response(a)
         for i in queryset:
             if i.room.user == user:

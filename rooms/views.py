@@ -9,7 +9,7 @@ from .serializers import LessonSerializer, TasksSerializer, AnswersSerializer, R
 from .permissions import IsRoomOwner, IsEssaAuthor
 from django.contrib.auth import get_user_model
 from rest_framework.pagination import PageNumberPagination
-
+from schedule.serializers import TableSerializer
 
 User = get_user_model()
 
@@ -72,6 +72,16 @@ class RoomApiView(ModelViewSet):
     queryset = Room.objects.all()
     serializer_class = RoomSerializer
     permission_classes = [IsRoomOwner, ]
+
+    @action(['PUT','PATCH', 'GET'], detail=True)
+    def accept_schedule(self, request, pk):
+        room = self.get_object()
+        print(room.table_room.all())
+        val = []
+        for i in room.table_room.all():
+            serializer = TableSerializer(i)
+            val.append(serializer.data)
+        return Response(val)
 
     def get_queryset(self):
         rooms = Room.objects.filter(user = self.request.user)
