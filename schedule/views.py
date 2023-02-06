@@ -48,13 +48,13 @@ class TableViewSet(ModelViewSet):
             return Response(serializer.data)
     
     def list(self, request, *args, **kwargs):
-        
         user = request.user
         queryset = self.queryset
         a = []
         if user.is_teacher:
             for i in queryset:
                 if i.room.user.studen_users.exists():
+                    print(i)
                     serializer = TableSerializer(i)
                     a.append(serializer.data)
             return Response(a)
@@ -62,4 +62,4 @@ class TableViewSet(ModelViewSet):
             if i.room.user == user:
                 serializer = TableSerializer(i)
                 a.append(serializer.data)
-        return Response(a)
+            return Response(a)
