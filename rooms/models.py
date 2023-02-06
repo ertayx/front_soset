@@ -11,6 +11,7 @@ class Essa(models.Model):
     teacher = models.ForeignKey(User, on_delete=models.SET_NULL , blank=True, null=True, related_name='teacher_users')
     checked = models.BooleanField(default=False)
     accepted = models.BooleanField(default=False)
+    deadline = models.CharField(max_length=10)
 
 
 class Room(models.Model):

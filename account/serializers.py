@@ -50,7 +50,7 @@ class RegisterSerializer(serializers.ModelSerializer):
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ("email", "username", "date_joined", "about")
+        fields = ("id", "email", "username", "date_joined", "about")
 
     
 
@@ -58,7 +58,7 @@ class UserSerializer(serializers.ModelSerializer):
 class ProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ("email", "username", "date_joined", "about", "is_teacher")
+        fields = ("id", "email", "username", "date_joined", "about", "is_teacher")
         
     def to_representation(self, instance):
         repr = super().to_representation(instance)
