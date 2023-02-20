@@ -47,10 +47,14 @@ class TasksApiView(ModelViewSet):
     serializer_class = TasksSerializer
     permission_classes = [IsAdminUser, ]
 
+    # def get_queryset(self):
+    #     rooms = Tasks.objects.filter(case = )
+    #     return rooms
+
     @action(['POST', 'DELETE'], detail=True)
     def answer(self, request, pk):
         task = self.get_object()
-        # print(task, '!!!!!!!!!')
+
         user = request.user
         answer = request.data
         

@@ -8,6 +8,7 @@ class Essa(models.Model):
     description = models.TextField(max_length=1000)
     text = models.TextField(max_length=3000, blank=True)
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, verbose_name='essa')
+    check = models.BooleanField(default=False)
 
 class Room(models.Model):
     LEVEL_CH = (
@@ -28,7 +29,6 @@ class Room(models.Model):
 
     def __str__(self) -> str:
         return f'{self.user} --> {self.level}'
-
 
 
 class Lessons(models.Model):
@@ -54,10 +54,19 @@ class Lessons(models.Model):
 
 
 class Tasks(models.Model):
+    CASE = (
+        ('1', '1'),
+        ('2', '2'),
+        ('3', '3'),
+        ('4', '4')
+    )
+
+
     lessons = models.ForeignKey(Lessons, related_name='task_lesson', on_delete=models.RESTRICT)
     right_answer = models.CharField(max_length=150)
     flag = models.IntegerField(default=0)
     description = models.TextField()
+    case_ = models.CharField(choices=CASE, max_length=20, default='1')
     
     def __str__(self) -> str:
         return f'{self.right_answer} -->{self.lessons}'
@@ -72,3 +81,11 @@ class Answers(models.Model):
     def __str__(self) -> str:
         return f'{self.tasks}-->{self.user}'
 
+
+class Schedule(models.Model):
+    date = models.DateTimeField(blank=True)
+    start_date = models.DateTimeField(auto_now=True)
+    user = models.ForeignKey(User, related_name='schedule_user',on_delete=models.DO_NOTHING,blank=True)
+
+    def __str__(self) -> str:
+        return f'{self.user}-->{self.date}'

@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     # apps
     'account',
     'rooms',
+    'chat',
 
     # libs
     'rest_framework',
@@ -50,6 +51,7 @@ INSTALLED_APPS = [
     'drf_yasg',
     'drf_api_logger',
     'corsheaders',
+    'channels',
 
 ]
 
