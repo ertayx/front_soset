@@ -1,4 +1,4 @@
-from rest_framework.permissions import BasePermission
+from rest_framework.permissions import BasePermission, SAFE_METHODS
 from django.contrib.auth import get_user_model
 
 User = get_user_model()
@@ -11,4 +11,5 @@ class IsRoomOwner(BasePermission):
 class IsEssaAuthor(BasePermission):
     def has_object_permission(self, request, view, obj):
         student_list = User.objects.get(id=request.user.id).student.all()
-        return (obj.user == request.user) or (obj.user in student_list)
+        return (obj.student == request.user) or (obj.student in student_list)
+

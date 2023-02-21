@@ -43,7 +43,8 @@ INSTALLED_APPS = [
     'account',
     'rooms',
     'chat',
-
+    'schedule',
+    
     # libs
     'rest_framework',
     'rest_framework_simplejwt',
@@ -86,6 +87,17 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'config.wsgi.application'
+ASGI_APPLICATION = 'config.asgi.application'
+
+
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            "hosts": [('127.0.0.1', 6379)],
+        },
+    },
+}
 
 
 # Database
@@ -138,6 +150,8 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
+
+
 import os
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
@@ -157,6 +171,8 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+DJANGO_CHANNELS_REST_API = {}
+
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework_simplejwt.authentication.JWTAuthentication',
@@ -165,7 +181,6 @@ REST_FRAMEWORK = {
 
 
 from datetime import timedelta
-
 
 SWAGGER_SETTINGS = {
     'SECURITY_DEFINITIONS': {

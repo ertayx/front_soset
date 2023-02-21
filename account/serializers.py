@@ -1,7 +1,20 @@
 from rest_framework import serializers
-from django.contrib.auth import get_user_model
+from .models import User
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer, TokenRefreshSerializer
 
-User = get_user_model()
+
+
+class CustomLoginSerializer(TokenObtainPairSerializer):
+    def validate(self, attrs):
+        data = super().validate(attrs)
+        # print(attrs)
+        # print(data)
+        user = User.objects.get(email = attrs['email']) 
+        data["id"] = user.id
+        data["is_teacher"] = user.is_teacher
+        return data
+
+
 
 class RegisterSerializer(serializers.ModelSerializer):
 
@@ -37,7 +50,7 @@ class RegisterSerializer(serializers.ModelSerializer):
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = '__all__'
+        fields = ("id", "email", "username", "date_joined", "about")
 
     
 
@@ -45,28 +58,17 @@ class UserSerializer(serializers.ModelSerializer):
 class ProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ("email", "username", "date_joined", "about")
+        fields = ("id", "email", "username", "date_joined", "about", "is_teacher")
         
     def to_representation(self, instance):
         repr = super().to_representation(instance)
         repr['full_name'] = instance.first_name + ' ' + instance.last_name
+        # print(instance.student.name, '!!!!!!!!!!!@!')
 
-        if instance.teacher:
-            repr['student'] = StudentSerializer(instance.student.all(), many=True).data
         return repr
 
 
-class StudentSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = User
-        fields = ("email", "username", "date_joined")
 
-    def to_representation(self, instance):
-        repr = super().to_representation(instance)
-        repr['full_name'] = instance.first_name + ' ' + instance.last_name
-        return repr
-
-    
     
    
 class ProfileUpdateSerializer(serializers.ModelSerializer):

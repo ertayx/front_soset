@@ -1,14 +1,18 @@
 from django.db import models
-from django.contrib.auth import get_user_model
-
-User = get_user_model()
-
+from account.models import User
+# from schedule.models import Table
 class Essa(models.Model):
+    teacher = models.ForeignKey(User, related_name='essays', on_delete=models.CASCADE)
     title = models.CharField(max_length=150)
     description = models.TextField(max_length=1000)
     text = models.TextField(max_length=3000, blank=True)
-    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, verbose_name='essa')
-    check = models.BooleanField(default=False)
+    teacher_text = models.TextField(max_length=3000, blank=True)
+    student = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='student_essays')
+    teacher = models.ForeignKey(User, on_delete=models.SET_NULL , blank=True, null=True, related_name='teacher_users')
+    checked = models.BooleanField(default=False)
+    accepted = models.BooleanField(default=False)
+    deadline = models.CharField(max_length=10)
+
 
 class Room(models.Model):
     LEVEL_CH = (
@@ -26,7 +30,6 @@ class Room(models.Model):
     payment = models.IntegerField(default=0)
     count_lessons = models.IntegerField(default=0)
     
-
     def __str__(self) -> str:
         return f'{self.user} --> {self.level}'
 
@@ -53,6 +56,20 @@ class Lessons(models.Model):
         return f'{self.title}-->{self.case_work} --> {self.level}'
 
 
+class CaseWork(models.Model):
+    CASECHOISE = (
+        ('first', 'first'),
+        ('second', 'second'),
+        ('third', 'third'),
+        ('fourth','fourth')
+    )
+
+    title = models.CharField(choices=CASECHOISE, max_length=30)
+
+    def __str__(self) -> str:
+        return f'{self.title}'
+
+
 class Tasks(models.Model):
     CASE = (
         ('1', '1'),
@@ -66,8 +83,7 @@ class Tasks(models.Model):
     right_answer = models.CharField(max_length=150)
     flag = models.IntegerField(default=0)
     description = models.TextField()
-    case_ = models.CharField(choices=CASE, max_length=20, default='1')
-    
+    case_work = models.ForeignKey(CaseWork, related_name='tasks_case', on_delete=models.DO_NOTHING)
     def __str__(self) -> str:
         return f'{self.right_answer} -->{self.lessons}'
 

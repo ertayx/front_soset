@@ -1,11 +1,9 @@
 from rest_framework.routers import DefaultRouter
 from django.urls import path, include
-
-from .views import Chat_Room
+from .views import TableViewSet
 
 router = DefaultRouter()
-router.register('chat_room', Chat_Room)
-
+router.register('schedule', TableViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),
