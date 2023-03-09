@@ -16,7 +16,7 @@ class Room(models.Model):
     name = models.CharField(max_length=255, null=False, blank=False, unique=True)
     host = models.ForeignKey(User, on_delete=models.CASCADE, related_name="rooms")
     current_users = models.ManyToManyField(User, related_name="current_rooms", blank=True)
-    class_work = models.ForeignKey("Task_Class_work", related_name="classwork_rooms", blank=True,)
+    class_work = models.ForeignKey("Task_Class_work", related_name="classwork_rooms", blank=True, on_delete=models.SET_NULL, null=True)
 
     def __str__(self):
         return f"Room({self.name} {self.host})"
