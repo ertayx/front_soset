@@ -6,10 +6,10 @@ from django.contrib.auth import get_user_model
 from rest_framework.viewsets import ModelViewSet
 
 from .models import Room, Message
-from .serializers import RoomSerializer
+from .serializers import RoomChatSerializer
 
 User = get_user_model()
 
 class Chat_Room(ModelViewSet):
     queryset = Room.objects.all()
-    serializer_class = RoomSerializer
+    serializer_class = RoomChatSerializer

@@ -1,24 +1,25 @@
 from .models import Room, Message
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
+from account.serializers import UserSerializer
 
 User = get_user_model()
 
-class UserSerializer(serializers.ModelSerializer):
+# class UserSerializer(serializers.ModelSerializer):
 
-    class Meta:
-        model = User
-        fields = ["id", "username", "email", "password"]
-        extra_kwargs = {'password': {'write_only': True}}
+#     class Meta:
+#         model = User
+#         fields = ["id", "username", "email", "password"]
+#         extra_kwargs = {'password': {'write_only': True}}
 
-    def create(self, validated_data):
-        user = User(
-            email=validated_data['email'],
-            username=validated_data['username']
-        )
-        user.set_password(validated_data['password'])
-        user.save()
-        return user
+#     def create(self, validated_data):
+#         user = User(
+#             email=validated_data['email'],
+#             username=validated_data['username']
+#         )
+#         user.set_password(validated_data['password'])
+#         user.save()
+#         return user
 
 
 class MessageSerializer(serializers.ModelSerializer):
@@ -34,7 +35,7 @@ class MessageSerializer(serializers.ModelSerializer):
         return obj.created_at.strftime("%d-%m-%Y %H:%M:%S")
 
 
-class RoomSerializer(serializers.ModelSerializer):
+class RoomChatSerializer(serializers.ModelSerializer):
     last_message = serializers.SerializerMethodField()
     messages = MessageSerializer(many=True, read_only=True)
 

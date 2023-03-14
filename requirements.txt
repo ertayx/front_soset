@@ -16,3 +16,6 @@ django-celery-results
 django-redis
 redis
 Pillow
+channels
+channels-redis
+djangochannelsrestframework
